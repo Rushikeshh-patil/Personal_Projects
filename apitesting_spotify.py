@@ -2,6 +2,8 @@ import json
 import base64
 import requests
 from urllib.parse import urlencode
+
+
 api_key = 'a59cf2d2b5a84ba6b397cb11f29e30d1'
 client_secret = '0d720cd6ab6142b797ebfd9feecc7d07'
 
