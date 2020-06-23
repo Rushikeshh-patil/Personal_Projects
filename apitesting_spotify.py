@@ -1,6 +1,7 @@
 import json
 import base64
 import requests
+import datetime
 from urllib.parse import urlencode
 
 
@@ -18,12 +19,23 @@ def get_token(api_key,client_secret):
     r = requests.post(token_url, data = token_data, headers = token_headers)
     token_response_data = r.json()
     access_token = token_response_data['access_token']
+    global api_obtained_at
+    api_obtained_at = datetime.datetime.now()
 
     return access_token
 
-def searchonspotify(keyword):
+def is_api_expired():
+    now = datetime.datetime.now()
+    current = now + datetime.timedelta(seconds=3600)
+    if current < api_obtained_at :
+        return False
+    return True
 
-    access_token = get_token(api_key,client_secret)
+def searchonspotify(keyword):
+    
+    if is_api_expired(): 
+        access_token = get_token(api_key,client_secret)
+
     keyword = str(keyword)
     endpoint_base = f'https://api.spotify.com/v1/search'
     data = urlencode({'q':keyword, 'type':'track'})
